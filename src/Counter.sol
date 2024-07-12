@@ -1,14 +1,46 @@
-// SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.13;
+// SPDX-License-Identifier: MIT
+// Compatible with OpenZeppelin Contracts ^5.0.0
+pragma solidity ^0.8.26;
 
-contract Counter {
-    uint256 public number;
+import "@openzeppelin/contracts/utils/Pausable.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-    function setNumber(uint256 newNumber) public {
-        number = newNumber;
+/// @custom:security-contact security@monea.xyz
+contract MoneaNetworkAppchainRegistry is Pausable, Ownable {
+    constructor(address initialOwner) Ownable(initialOwner) {}
+
+    uint64 public constant MAX_CHAIN_ID = (uint64() / 2) - 36;
+
+    struct Appchain {
+        uint256 chainId;
+        string name;
+        string rpcUrl;
+        string bridgeUrl;
+        string bridgeAddress;
+        string bridgeAbi;
+        string tokenAddress;
+        string tokenAbi;
+        string tokenSymbol;
+        string tokenDecimals;
+        string tokenName;
+        string tokenLogo;
+        string tokenBridgeAddress;
+        string tokenBridgeAbi;
+        string tokenBridgeUrl;
+        string tokenBridgeSymbol;
+        string tokenBridgeDecimals;
+        string tokenBridgeName;
+        string tokenBridgeLogo;
     }
 
-    function increment() public {
-        number++;
+    // chainId -> appchainName
+    mapping(uint256 => string) public appchainRegistry;
+
+    function pause() public onlyOwner {
+        _pause();
+    }
+
+    function unpause() public onlyOwner {
+        _unpause();
     }
 }
